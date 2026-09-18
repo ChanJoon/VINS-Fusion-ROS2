@@ -2,7 +2,7 @@
 ---
 model_type: PINHOLE
 camera_name: camera
-image_width: 640
+image_width: 848
 image_height: 480
 distortion_parameters:
    k1: 0.0
@@ -10,7 +10,7 @@ distortion_parameters:
    p1: 0.0
    p2: 0.0
 projection_parameters:
-   fx: 382.83856201171875
-   fy: 382.83856201171875
-   cx: 317.4849853515625
-   cy: 235.34381103515625
+   fx: 424.5365295410156
+   fy: 424.5365295410156
+   cx: 426.60626220703125
+   cy: 237.01695251464844
