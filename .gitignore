@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+# Runtime estimator output (vio.csv, extrinsic_parameter.csv, pose_graph)
+vins/output/
