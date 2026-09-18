@@ -1,0 +1,68 @@
+%YAML:1.0
+
+#common parameters
+#support: 1 imu 1 cam; 1 imu 2 cam: 2 cam; 
+imu: 1
+num_of_cam: 2  
+
+imu_topic: "/mavros/imu/data_raw"
+image0_topic: "/camera/infra1/image_rect_raw"
+image1_topic: "/camera/infra2/image_rect_raw"
+output_path: "/home/cj/workspace/catkin_ws_vinsfusion/output/qav250_d435i_px4imu"
+
+cam0_calib: "left.yaml"
+cam1_calib: "right.yaml"
+image_width: 848
+image_height: 480
+
+# GPU acceleration
+use_gpu         : 0
+use_gpu_acc_flow: 0
+use_gpu_ceres   : 0
+   
+
+# Extrinsic parameter between IMU and Camera.
+estimate_extrinsic: 0
+
+
+body_T_cam0: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ -0.00082727195852219171, -0.0027937203266888899, 0.99999575536491214, 0.11493064547436971, -0.99999965781044342, 1.9929574557402583e-06, -0.00082726961913024105, 0.015379498641096202, 3.1821095426152387e-07, -0.99999609755376673, -0.0027937210194247924, -0.014022100865001563, 0, 0, 0, 1 ]
+body_T_cam1: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 0.00076759477585922574, -0.0025136149427153033, 0.99999654626312562, 0.11507872629051313, -0.99999953941773223, 0.00057423085346486259, 0.00076904047363598441, -0.034235486427747916, -0.00057616194184861868, -0.99999667599389863, -0.002513173008385453, -0.013998670947441106, 0, 0, 0, 1 ]
+#Multiple thread support
+multiple_thread: 1
+
+#feature traker paprameters
+max_cnt: 150            # max feature number in feature tracking
+min_dist: 30            # min distance between two features 
+freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+F_threshold: 1.0        # ransac threshold (pixel)
+show_track: 0           # publish tracking image as topic
+flow_back: 1            # perform forward and backward optical flow to improve feature tracking accuracy
+
+#optimization parameters
+max_solver_time: 0.04  # max solver itration time (ms), to guarantee real time
+max_num_iterations: 8   # max solver itrations, to guarantee real time
+keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
+
+#imu parameters       The more accurate parameters you provide, the better performance
+acc_n: 0.1          # accelerometer measurement noise standard deviation. #0.2   0.04
+gyr_n: 0.01         # gyroscope measurement noise standard deviation.     #0.05  0.004
+acc_w: 0.001         # accelerometer bias random work noise standard deviation.  #0.002
+gyr_w: 0.0001       # gyroscope bias random work noise standard deviation.     #4.0e-5
+g_norm: 9.81
+
+#unsynchronization parameters
+estimate_td: 1
+td: -0.0013572740898351251
+
+#loop closure parameters
+load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
+pose_graph_save_path: "/home/cj/workspace/catkin_ws_vinsfusion/output/qav250_d435i_px4imu/pose_graph"
+save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0 
