@@ -1,0 +1,81 @@
+%YAML:1.0
+
+#common parameters
+#support: 1 imu 1 cam; 1 imu 2 cam: 2 cam; 
+imu: 0 
+num_of_cam: 2  
+
+imu_topic: "/mavros/imu/data"
+image0_topic: "/camera/infra1/image_rect_raw"
+image1_topic: "/camera/infra2/image_rect_raw"
+output_path: "/home/dji/output/"
+
+cam0_calib: "left.yaml"
+cam1_calib: "right.yaml"
+image_width: 640
+image_height: 480
+
+# GPU acceleration
+use_gpu         : 0
+use_gpu_acc_flow: 0
+use_gpu_ceres   : 0
+   
+
+# Extrinsic parameter between IMU and Camera.
+estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
+                        # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
+
+body_T_cam0: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 0.00494182, 0.01753063, 0.99983411, 0.00005896,
+          -0.99998507, -0.00224715, 0.00498196, 0.00009923,
+           0.00233412, -0.9998438, 0.01751926, -0.00006573,
+           0.0, 0.0, 0.0, 1.0 ]
+
+body_T_cam1: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: d
+   data: [ 0.00574941, 0.01748149, 0.99983066, 0.00033317,
+          -0.99998085, -0.00218773, 0.00578853, -0.04997602,
+           0.00228855, -0.99984479, 0.01746858, 0.00003054,
+           0.0, 0.0, 0.0, 1.0 ]
+
+#Multiple thread support
+multiple_thread: 1
+
+#feature traker paprameters
+max_cnt: 150            # max feature number in feature tracking
+min_dist: 30            # min distance between two features 
+freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
+F_threshold: 1.0        # ransac threshold (pixel)
+show_track: 1           # publish tracking image as topic
+flow_back: 1            # perform forward and backward optical flow to improve feature tracking accuracy
+
+#optimization parameters
+max_solver_time: 0.04  # max solver itration time (ms), to guarantee real time
+max_num_iterations: 8   # max solver itrations, to guarantee real time
+keyframe_parallax: 10.0 # keyframe selection threshold (pixel)
+
+#imu parameters       The more accurate parameters you provide, the better performance
+acc_n: 2.0000e-2    # PX4 IMU Kalibr accel density scaled for 100 Hz VINS preintegration
+gyr_n: 1.6968e-3    # PX4 IMU Kalibr gyro density scaled for 100 Hz VINS preintegration
+acc_w: 2.0000e-3    # accelerometer bias random walk from PX4 IMU Kalibr
+gyr_w: 1.9393e-5    # gyroscope bias random walk from PX4 IMU Kalibr
+g_norm: 9.81        # gravity magnitude
+
+# ROS frame IDs for MAVROS/PX4 VIO.
+world_frame_id: "odom"
+body_frame_id: "base_link"
+camera_frame_id: "camera"
+
+#unsynchronization parameters
+estimate_td: 1                      # online estimate time offset between camera and imu
+td: 0.00                             # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+
+#loop closure parameters
+load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
+pose_graph_save_path: "/home/dji/output/pose_graph/" # save and load path
+save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0 
