@@ -61,6 +61,15 @@ add_executable(vins_node src/rosNodeTest.cpp)
 ament_target_dependencies(vins_node rclcpp rcpputils std_msgs visualization_msgs geometry_msgs nav_msgs tf2 tf2_ros cv_bridge camera_models image_transport)
 target_link_libraries(vins_node vins_lib) 
 
+add_executable(vins_to_mavros_odometry src/vins_to_mavros_odometry.cpp)
+ament_target_dependencies(vins_to_mavros_odometry rclcpp geometry_msgs nav_msgs tf2 tf2_ros)
+
+add_executable(odometry_to_pose_stamped src/odometry_to_pose_stamped.cpp)
+ament_target_dependencies(odometry_to_pose_stamped rclcpp geometry_msgs nav_msgs)
+
+add_executable(pose_to_path src/pose_to_path.cpp)
+ament_target_dependencies(pose_to_path rclcpp geometry_msgs nav_msgs)
+
 add_executable(kitti_odom_test src/KITTIOdomTest.cpp)
 ament_target_dependencies(kitti_odom_test rclcpp rcpputils std_msgs visualization_msgs geometry_msgs nav_msgs tf2 tf2_ros cv_bridge camera_models image_transport)
 target_link_libraries(kitti_odom_test vins_lib) 
@@ -85,7 +94,7 @@ install(
 
 # Install nodes
 install(
-  TARGETS vins_node
+  TARGETS vins_node vins_to_mavros_odometry odometry_to_pose_stamped pose_to_path
   DESTINATION lib/${PROJECT_NAME}
 )
 
